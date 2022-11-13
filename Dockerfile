@@ -9,7 +9,7 @@ RUN yarn install
 
 COPY . /app/
 
-EXPOSE 3000
+EXPOSE 5001
 RUN yarn build
 
 CMD ["yarn", "start:prod"] 

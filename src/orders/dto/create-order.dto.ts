@@ -14,5 +14,5 @@ export class CreateOrderDto {
   @ArrayNotEmpty()
   @ValidateNested()
   @Type(() => CreateOrderDetailDto)
-  detail: CreateOrderDetailDto[];
+  details: CreateOrderDetailDto[];
 }

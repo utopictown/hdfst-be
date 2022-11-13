@@ -27,7 +27,7 @@ export class OrdersService {
     const user = await this.usersRepository.findOneBy({ id: request.user.userId });
 
     this.dataSource.transaction(async (manager) => {
-      const details = createOrderDto.detail.map((_detail) => {
+      const details = createOrderDto.details.map((_detail) => {
         let orderDetail = new OrderDetail();
         orderDetail.item_code = _detail.item_code;
         orderDetail.item_name = _detail.item_name;
@@ -60,7 +60,14 @@ export class OrdersService {
   async findAll() {
     const request = RequestContext.currentContext.req;
     const user = await this.usersRepository.findOneByOrFail({ id: request.user.userId });
-    const orders = await this.ordersRepository.find({ where: { user: user } });
+    const ordersResult = await this.ordersRepository.find({ where: { user: user } });
+
+    const orders = ordersResult.map((order) => {
+      order.transaction_date = `${new Date(order.transaction_date).getFullYear()}-${
+        new Date(order.transaction_date).getMonth() + 1
+      }-${new Date(order.transaction_date).getDate()}`;
+      return order;
+    });
     return { ...this.response, data: orders, message: "Successfully retreived user's order" };
   }
 
